@@ -1,0 +1,5 @@
+# EAP User File for hostapd
+# Each line defines an EAP user
+
+# User with specific Common Name (CN)
+"Alice" TLS
