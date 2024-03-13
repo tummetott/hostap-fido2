@@ -1978,6 +1978,13 @@ ifdef CONFIG_NO_TKIP
 CFLAGS += -DCONFIG_NO_TKIP
 endif
 
+ifdef CONFIG_FIDO
+CFLAGS += -I../../fidoSSL/src/
+LIBS += ../../fidoSSL/build/libfidossl.a
+LIBS += ../../fidoSSL/libs/tinycbor/lib/libtinycbor.a
+LIBS += -lfido2 -ljansson -lsqlite3
+endif
+
 dynamic_eap_methods: $(EAPDYN)
 
 _OBJS_VAR := OBJS_priv
