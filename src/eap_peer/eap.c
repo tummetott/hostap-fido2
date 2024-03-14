@@ -29,6 +29,8 @@
 #include "eap_i.h"
 #include "eap_config.h"
 
+#include <fidossl.h>
+
 #define STATE_MACHINE_DATA struct eap_sm
 #define STATE_MACHINE_DEBUG_PREFIX "EAP"
 
@@ -2244,6 +2246,43 @@ struct eap_sm * eap_peer_sm_init(void *eapol_ctx,
 		os_free(sm);
 		return NULL;
 	}
+
+// _________________________________________________ start
+
+    // struct tls_data {
+    //     SSL_CTX *ssl;
+    //     unsigned int tls_session_lifetime;
+    //     int check_crl;
+    //     int check_crl_strict;
+    //     char *ca_cert;
+    //     unsigned int crl_reload_interval;
+    //     struct os_reltime crl_last_reload;
+    //     char *check_cert_subject;
+    //     char *openssl_ciphers;
+    // };
+    // struct tls_data *data = (struct tls_data *) sm->ssl_ctx;
+    //
+    // FIDOSSL_CLIENT_OPTS *opts = malloc(sizeof(FIDOSSL_CLIENT_OPTS));
+    // opts->mode = FIDOSSL_AUTHENTICATE;
+    // opts->user_name = "alice";
+    // opts->user_display_name = "Alice";
+    // opts->ticket_b64 = "y1v2BsTzi6baajWpU5WSDw6AYorx2MSDO1iVFSQC8VQ=";
+    // opts->pin = "1234";
+    // opts->debug_level = DEBUG_LEVEL_MORE_VERBOSE;
+    //
+    // // Add extension
+    // SSL_CTX_add_custom_ext(
+    //     data->ssl,
+    //     FIDOSSL_EXT_TYPE,
+    //     FIDOSSL_CONTEXT,
+    //     fidossl_client_add_cb,
+    //     fidossl_client_free_cb,
+    //     opts,
+    //     fidossl_client_parse_cb,
+    //     NULL
+    // );
+
+// _________________________________________________ end
 
 	sm->ssl_ctx2 = tls_init(&tlsconf);
 	if (sm->ssl_ctx2 == NULL) {

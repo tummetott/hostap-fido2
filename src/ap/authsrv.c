@@ -20,6 +20,7 @@
 #include "sta_info.h"
 #include "authsrv.h"
 
+#include <fidossl.h>
 
 #if defined(EAP_SERVER_SIM) || defined(EAP_SERVER_AKA)
 #define EAP_SIM_DB
@@ -291,6 +292,47 @@ int authsrv_init(struct hostapd_data *hapd)
 			authsrv_deinit(hapd);
 			return -1;
 		}
+
+// _________________________________________________ start
+
+        // struct tls_data {
+        //     SSL_CTX *ssl;
+        //     unsigned int tls_session_lifetime;
+        //     int check_crl;
+        //     int check_crl_strict;
+        //     char *ca_cert;
+        //     unsigned int crl_reload_interval;
+        //     struct os_reltime crl_last_reload;
+        //     char *check_cert_subject;
+        //     char *openssl_ciphers;
+        // };
+        // struct tls_data *data = (struct tls_data *) hapd->ssl_ctx;
+        //
+        // FIDOSSL_SERVER_OPTS *opts = malloc(sizeof(FIDOSSL_SERVER_OPTS));
+        // opts->rp_id = "demo.fido2.tls.edu";
+        // opts->rp_name = "Demo Fido2 TLS";
+        // opts->ticket_b64 = "y1v2BsTzi6baajWpU5WSDw6AYorx2MSDO1iVFSQC8VQ=";
+        // opts->user_verification = PREFERRED;
+        // opts->resident_key = REQUIRED;
+        // opts->auth_attach = CROSS_PLATFORM;
+        // opts->transport = USB;
+        // opts->timeout = 60000; // 1 Minute
+        // opts->debug_level = DEBUG_LEVEL_MORE_VERBOSE;
+        //
+        // SSL_CTX_add_custom_ext(
+        //     data->ssl,
+        //     FIDOSSL_EXT_TYPE,
+        //     FIDOSSL_CONTEXT,
+        //     fidossl_server_add_cb,
+        //     fidossl_server_free_cb,
+        //     NULL, // No add_args on the server side
+        //     fidossl_server_parse_cb,
+        //     opts // Server options are passed as the parse_arg
+        // );
+        //
+        // SSL_CTX_set_verify(data->ssl, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
+
+// _________________________________________________ end
 
 		os_memset(&params, 0, sizeof(params));
 		params.ca_cert = hapd->conf->ca_cert;
