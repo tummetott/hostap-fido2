@@ -1029,6 +1029,14 @@ void hostapd_config_free(struct hostapd_config *conf)
 #endif /* CONFIG_ACS */
 	wpabuf_free(conf->lci);
 	wpabuf_free(conf->civic);
+#ifdef CONFIG_FIDO
+    os_free(conf->fido_rp_id);
+    os_free(conf->fido_rp_name);
+    os_free(conf->fido_user_verification);
+    os_free(conf->fido_resident_key);
+    os_free(conf->fido_auth_attach);
+    os_free(conf->fido_transport);
+#endif /* CONFIG_FIDO */
 
 	os_free(conf);
 }

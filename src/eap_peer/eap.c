@@ -2281,8 +2281,6 @@ struct eap_sm * eap_peer_sm_init(void *eapol_ctx,
         fidossl_client_parse_cb,
         NULL
     );
-    // TODO:
-    // free(opts);
 #endif
 
 	sm->ssl_ctx2 = tls_init(&tlsconf);
