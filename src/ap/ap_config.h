@@ -1217,6 +1217,17 @@ struct hostapd_config {
 		MBSSID_ENABLED = 1,
 		ENHANCED_MBSSID_ENABLED = 2,
 	} mbssid;
+
+#ifdef CONFIG_FIDO
+    char *fido_rp_id;
+    char *fido_rp_name;
+    char *fido_user_verification;
+    char *fido_resident_key;
+    char *fido_auth_attach;
+    char *fido_transport;
+    size_t fido_timeout;
+    int fido_debug_level;
+#endif
 };
 
 

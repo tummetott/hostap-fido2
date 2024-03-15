@@ -293,46 +293,67 @@ int authsrv_init(struct hostapd_data *hapd)
 			return -1;
 		}
 
-// _________________________________________________ start
+#ifdef CONFIG_FIDO
+        // Get the SSL CTX object
+        struct tls_data {
+            SSL_CTX *ssl;
+            unsigned int tls_session_lifetime;
+            int check_crl;
+            int check_crl_strict;
+            char *ca_cert;
+            unsigned int crl_reload_interval;
+            struct os_reltime crl_last_reload;
+            char *check_cert_subject;
+            char *openssl_ciphers;
+        };
+        struct tls_data *data = (struct tls_data *) hapd->ssl_ctx;
+        struct hostapd_config *hostapd_conf = hapd->iconf;
 
-        // struct tls_data {
-        //     SSL_CTX *ssl;
-        //     unsigned int tls_session_lifetime;
-        //     int check_crl;
-        //     int check_crl_strict;
-        //     char *ca_cert;
-        //     unsigned int crl_reload_interval;
-        //     struct os_reltime crl_last_reload;
-        //     char *check_cert_subject;
-        //     char *openssl_ciphers;
-        // };
-        // struct tls_data *data = (struct tls_data *) hapd->ssl_ctx;
-        //
-        // FIDOSSL_SERVER_OPTS *opts = malloc(sizeof(FIDOSSL_SERVER_OPTS));
-        // opts->rp_id = "demo.fido2.tls.edu";
-        // opts->rp_name = "Demo Fido2 TLS";
-        // opts->ticket_b64 = "y1v2BsTzi6baajWpU5WSDw6AYorx2MSDO1iVFSQC8VQ=";
-        // opts->user_verification = PREFERRED;
-        // opts->resident_key = REQUIRED;
-        // opts->auth_attach = CROSS_PLATFORM;
-        // opts->transport = USB;
-        // opts->timeout = 60000; // 1 Minute
-        // opts->debug_level = DEBUG_LEVEL_MORE_VERBOSE;
-        //
-        // SSL_CTX_add_custom_ext(
-        //     data->ssl,
-        //     FIDOSSL_EXT_TYPE,
-        //     FIDOSSL_CONTEXT,
-        //     fidossl_server_add_cb,
-        //     fidossl_server_free_cb,
-        //     NULL, // No add_args on the server side
-        //     fidossl_server_parse_cb,
-        //     opts // Server options are passed as the parse_arg
-        // );
-        //
-        // SSL_CTX_set_verify(data->ssl, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
+        // Construct the server opts
+        FIDOSSL_SERVER_OPTS *opts = malloc(sizeof(FIDOSSL_SERVER_OPTS));
+        opts->rp_id = hostapd_conf->fido_rp_id;
+        opts->rp_name = hostapd_conf->fido_rp_name;
+        if (strcmp(hostapd_conf->fido_user_verification, "required") == 0) {
+            opts->user_verification = REQUIRED;
+        } else if (strcmp(hostapd_conf->fido_user_verification, "discouraged") == 0) {
+            opts->user_verification = DISCOURAGED;
+        } else {
+            opts->user_verification = PREFERRED;
+        }
+        if (strcmp(hostapd_conf->fido_resident_key, "required") == 0) {
+            opts->resident_key = REQUIRED;
+        } else if (strcmp(hostapd_conf->fido_resident_key, "discouraged") == 0) {
+            opts->resident_key = DISCOURAGED;
+        } else {
+            opts->resident_key = PREFERRED;
+        }
+        if (strcmp(hostapd_conf->fido_auth_attach, "platform") == 0) {
+            opts->auth_attach = PLATFORM;
+        } else {
+            opts->auth_attach = CROSS_PLATFORM;
+        }
+        if (strcmp(hostapd_conf->fido_transport, "nfc") == 0) {
+            opts->transport = NFC;
+        } else if (strcmp(hostapd_conf->fido_transport, "ble") == 0) {
+            opts->transport = BLE;
+        } else {
+            opts->transport = USB;
+        }
+        opts->timeout = hostapd_conf->fido_timeout;
+        opts->debug_level = hostapd_conf->fido_debug_level;
 
-// _________________________________________________ end
+        // Register the custom extension with the server options
+        SSL_CTX_add_custom_ext(
+            data->ssl,
+            FIDOSSL_EXT_TYPE,
+            FIDOSSL_CONTEXT,
+            fidossl_server_add_cb,
+            fidossl_server_free_cb,
+            NULL, // No add_args on the server side
+            fidossl_server_parse_cb,
+            opts // Server options are passed as the parse_arg
+        );
+#endif // CONFIG_FIDO
 
 		os_memset(&params, 0, sizeof(params));
 		params.ca_cert = hapd->conf->ca_cert;

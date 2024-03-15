@@ -1979,6 +1979,7 @@ CFLAGS += -DCONFIG_NO_TKIP
 endif
 
 ifdef CONFIG_FIDO
+CFLAGS += -DCONFIG_FIDO
 CFLAGS += -I../../fidoSSL/src/
 LIBS += ../../fidoSSL/build/libfidossl.a
 LIBS += ../../fidoSSL/libs/tinycbor/lib/libtinycbor.a

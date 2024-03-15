@@ -50,6 +50,10 @@
 #include "tls.h"
 #include "tls_openssl.h"
 
+#ifdef CONFIG_FIDO
+#include <fidossl.h>
+#endif
+
 #if !defined(CONFIG_FIPS) &&                             \
     (defined(EAP_FAST) || defined(EAP_FAST_DYNAMIC) ||   \
      defined(EAP_SERVER_FAST))
@@ -5542,6 +5546,12 @@ int tls_connection_set_params(void *tls_ctx, struct tls_connection *conn,
 	}
 #endif /* HAVE_OCSP */
 #endif /* OPENSSL_IS_BORINGSSL */
+#ifdef CONFIG_FIDO
+    if (!SSL_set_tlsext_host_name(conn->ssl, "demo.fido2.tls.edu")) {
+        printf("Failed to set the SNI hostname\n");
+        return -1;
+    }
+#endif /* CONFIG_FIDO */
 
 	conn->flags = params->flags;
 

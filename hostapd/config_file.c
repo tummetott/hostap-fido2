@@ -4970,6 +4970,24 @@ static int hostapd_config_fill(struct hostapd_config *conf,
 		bss->mld_indicate_disabled = atoi(pos);
 #endif /* CONFIG_TESTING_OPTIONS */
 #endif /* CONFIG_IEEE80211BE */
+#ifdef CONFIG_FIDO
+    } else if (os_strcmp(buf, "fido_rp_id") == 0) {
+		conf->fido_rp_id = os_strdup(pos);
+    } else if (os_strcmp(buf, "fido_rp_name") == 0) {
+		conf->fido_rp_name = os_strdup(pos);
+    } else if (os_strcmp(buf, "fido_user_verification") == 0) {
+        conf->fido_user_verification = os_strdup(pos);
+    } else if (os_strcmp(buf, "fido_resident_key") == 0) {
+        conf->fido_resident_key = os_strdup(pos);
+    } else if (os_strcmp(buf, "fido_auth_attach") == 0) {
+        conf->fido_auth_attach = os_strdup(pos);
+    } else if (os_strcmp(buf, "fido_transport") == 0) {
+        conf->fido_transport = os_strdup(pos);
+    } else if (os_strcmp(buf, "fido_timeout") == 0) {
+        conf->fido_timeout = atoi(pos);
+    } else if (os_strcmp(buf, "fido_debug_level") == 0) {
+        conf->fido_debug_level = atoi(pos);
+#endif
 	} else {
 		wpa_printf(MSG_ERROR,
 			   "Line %d: unknown configuration item '%s'",
