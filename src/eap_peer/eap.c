@@ -2276,7 +2276,7 @@ struct eap_sm * eap_peer_sm_init(void *eapol_ctx,
         FIDOSSL_EXT_TYPE,
         FIDOSSL_CONTEXT,
         fidossl_client_add_cb,
-        fidossl_client_free_cb,
+        NULL,
         opts,
         fidossl_client_parse_cb,
         NULL
