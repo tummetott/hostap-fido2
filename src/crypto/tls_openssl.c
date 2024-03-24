@@ -51,7 +51,7 @@
 #include "tls_openssl.h"
 
 #ifdef CONFIG_FIDO
-#include <fidossl.h>
+#include <fidossl/fidossl.h>
 #endif
 
 #if !defined(CONFIG_FIPS) &&                             \

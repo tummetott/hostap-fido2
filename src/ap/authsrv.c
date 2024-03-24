@@ -20,7 +20,7 @@
 #include "sta_info.h"
 #include "authsrv.h"
 
-#include <fidossl.h>
+#include <fidossl/fidossl.h>
 
 #if defined(EAP_SERVER_SIM) || defined(EAP_SERVER_AKA)
 #define EAP_SIM_DB
