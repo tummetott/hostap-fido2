@@ -1982,6 +1982,8 @@ ifdef CONFIG_FIDO
 CFLAGS += -DCONFIG_FIDO
 CFLAGS += $(shell PKG_CONFIG_PATH=~/thesis/fidoSSL/libs/pkgconfig pkg-config --cflags fidossl)
 LIBS += $(shell PKG_CONFIG_PATH=~/thesis/fidoSSL/libs/pkgconfig pkg-config --libs fidossl)
+LIBS += $(shell PKG_CONFIG_PATH=~/thesis/fidoSSL/libs/pkgconfig pkg-config --libs-only-L tinycbor \
+			  | sed 's/-L/-Wl,-rpath,/g')
 endif
 
 dynamic_eap_methods: $(EAPDYN)
