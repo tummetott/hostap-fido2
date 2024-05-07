@@ -29,7 +29,7 @@
 #include "eap_i.h"
 #include "eap_config.h"
 
-#include <fidossl.h>
+#include <fidossl/fidossl.h>
 
 #define STATE_MACHINE_DATA struct eap_sm
 #define STATE_MACHINE_DEBUG_PREFIX "EAP"
